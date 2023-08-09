@@ -10,12 +10,8 @@ RUN yum install unzip -y
 # Install wget package, which we will use it to download files from the internet 
 RUN yum install -y wget
 
-# Install Apache
-RUN yum install -y httpd
-
-# Install PHP 8 and required extensions
-RUN amazon-linux-extras enable php8 && \
-    yum install -y php php-cli php-fpm php-json php-common php-mysqlnd php-zip php-gd php-mbstring php-curl php-xml
+# Install PHP 8.0 and required extensions
+RUN dnf install -y httpd wget php-fpm php-mysqli php-json php php-devel
 
 # Copy custom php.ini to enable the cURL module
 COPY php.ini /etc/php.ini
@@ -23,14 +19,17 @@ COPY php.ini /etc/php.ini
 # Copy custom php.ini with updated settings
 COPY php.ini /usr/local/etc/php/
 
-# Download MySQL 8.0 repository package
+# Install required packages
+RUN dnf install -y wget
+
+# Download MySQL repository package
 RUN wget https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm
 
-# Install MySQL 8.0 repository package
-RUN dnf install -y mysql80-community-release-el9-1.noarch.rpm
+# List downloaded file
+RUN ls -lrt
 
-# List repositories to verify
-RUN dnf repolist enabled | grep "mysql.-community."
+# Install MySQL repository package
+RUN dnf install -y mysql80-community-release-el9-1.noarch.rpm
 
 # Install MySQL Community Server
 RUN dnf install -y mysql-community-server

@@ -13,27 +13,9 @@ RUN yum install -y wget
 # Install Apache
 RUN yum install -y httpd
 
-
-# Install PHP 8 and various extensions
-RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
-    yum install -y https://rpms.remirepo.net/enterprise/remi-release-8.rpm && \
-    yum module enable -y php:remi-8.0 && \
-    yum update -y && \
-    yum install -y \ 
-     php \
-     php-cli \
-     php-fpm \
-     php-json \
-     php-common \
-     php-mysqlnd \
-     php-zip \
-     php-gd \
-     php-mbstring \
-     php-curl \
-     php-xml \
-     php-pear \
-     php-bcmath \
-     php-json
+# Install PHP 8 and required extensions
+RUN amazon-linux-extras enable php8 && \
+    yum install -y php php-cli php-fpm php-json php-common php-mysqlnd php-zip php-gd php-mbstring php-curl php-xml
 
 # Copy custom php.ini to enable the cURL module
 COPY php.ini /etc/php.ini

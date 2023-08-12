@@ -1,2 +1,3 @@
 build_image.ps1
 Dockerfile - 1
+nest-app.env

@@ -1,5 +1,5 @@
 # Use the latest version of the Amazon Linux base image
-FROM amazonlinux:2023
+FROM amazonlinux:2
 
 # Update all installed packages to thier latest versions
 RUN yum update -y 
@@ -13,8 +13,10 @@ RUN yum install -y wget
 # Install PHP 8.0 and required extensions
 RUN dnf install -y httpd wget php-fpm php-mysqli php-json php php-devel
 
-# Copy custom php.ini with updated settings
-COPY php.ini /usr/local/etc/php/
+# Update the settings, memory_limit to 128M and max_execution_time to 300 in the php.ini
+RUN sed -i 's/^\s*;\?\s*memory_limit=.*/memory_limit = 128M/' /etc/php.ini
+
+RUN sed -i 's/^\s*;\?\s*max_execution_time =.*/max_execution_time = 300/¹ /etc/php.ini
 
 # Install required packages
 RUN dnf install -y wget
